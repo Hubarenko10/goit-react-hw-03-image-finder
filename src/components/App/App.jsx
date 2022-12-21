@@ -1,4 +1,4 @@
-import { fetch } from 'API';
+import { fetch } from 'api';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { SearchBar } from 'components/SearchBar/SearchBar';
 import { Component } from 'react';
