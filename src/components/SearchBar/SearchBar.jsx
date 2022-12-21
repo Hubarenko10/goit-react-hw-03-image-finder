@@ -1,14 +1,20 @@
+import PropTypes from 'prop-types';
 import { Searchbar,SearchForm,SearchFormBtn,BtnLabel,FormInput } from "./SearchBarStyle"
 import { MdSearch } from 'react-icons/md';
+
+
+
 export const SearchBar = ({onSubmit})=> {
-    // handleSubmit = e => {
-    // e.preventDefault();
-    
-    // }
+  const handleSubmit = e => {
+    e.preventDefault();
+    const searchQuery = e.target.elements.query.value;
+    onSubmit({ searchQuery });
+    e.target.reset();
+  };
 
 return(
     <Searchbar>
-  <SearchForm >
+  <SearchForm onSubmit={handleSubmit}>
     <SearchFormBtn type="submit" >
       <BtnLabel>Search</BtnLabel>
       <MdSearch size={35} />
@@ -22,10 +28,8 @@ return(
   </SearchForm>
 </Searchbar>
     )
-
-
 }
 
-
-// my key  
-//
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
