@@ -1,16 +1,13 @@
 import PropTypes from 'prop-types';
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
-import {
-  ImageGalleryStyled,
-  ImageGalleryItemStyled,
-} from './ImageGallery.styled';
+import { ImageGalleryItem } from './ImageGalleryItem';
+import { GalleryItem,ImageGalleryStyled } from './ImageGalleryStyled';
 
 export const ImageGallery = ({ photos, onSelect }) => {
   return (
     <ImageGalleryStyled>
       {photos.map(({ id, webformatURL, largeImageURL, tags }) => {
         return (
-          <ImageGalleryItemStyled key={id}>
+          <GalleryItem key={id}>
             <ImageGalleryItem
               photos={photos}
               onSelect={onSelect}
@@ -18,7 +15,7 @@ export const ImageGallery = ({ photos, onSelect }) => {
               largeImg={largeImageURL}
               tags={tags}
             />
-          </ImageGalleryItemStyled>
+          </GalleryItem>
         );
       })}
     </ImageGalleryStyled>

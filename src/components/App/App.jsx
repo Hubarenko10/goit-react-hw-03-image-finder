@@ -1,13 +1,13 @@
 import { Component } from 'react';
 import { fetchImages } from 'api';
 import toast, { Toaster } from 'react-hot-toast';
-import { AppStyled } from './App.styled';
-import { Searchbar } from 'components/Searchbar/Searchbar';
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
 import { ModalImage } from 'components/Modal/Modal';
 import { GlobalStyle } from 'components/GlobalStyle';
+import { Searchbar } from 'components/SearchBar/SearchBar';
+import { AppStyle } from './AppStyled';
 
 export class App extends Component {
   state = {
@@ -39,7 +39,7 @@ export class App extends Component {
         });
       }
     } catch (error) {
-      toast.error('Oops! Something went wrong! Please try again.');
+      toast.error('Oops! Something went wrong!');
     }
   }
 
@@ -79,7 +79,7 @@ export class App extends Component {
     const { photos, isLoading, selectedImage } = this.state;
     return (
       <>
-        <AppStyled>
+        <AppStyle>
           <Searchbar onSubmit={this.searchPhoto} />
           {photos.length > 0 && (
             <ImageGallery photos={photos} onSelect={this.selectImage} />
@@ -94,7 +94,7 @@ export class App extends Component {
           />
           <Toaster />
           <GlobalStyle />
-        </AppStyled>
+        </AppStyle>
       </>
     );
   }
