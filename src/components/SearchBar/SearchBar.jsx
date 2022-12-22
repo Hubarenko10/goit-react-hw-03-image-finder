@@ -1,33 +1,41 @@
-import { BtnLabel, Form, FormBtn, Header, Input } from "./SearchBarStyle"
-import { AiOutlineSearch } from 'react-icons/ai';
+import PropTypes from 'prop-types';
+import { FiSearch } from 'react-icons/fi';
+import {
+  SearchbarStyled,
+  SearchForm,
+  SearchFormButton,
+  SearchFormButtonLabel,
+  SearchFormInput,
+} from './Searchbar.styled';
 
-export const SearchBar = ({onSubmit}) => {
-const handleSubmit = e => {
+export const Searchbar = ({ onSubmit }) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    // const searchQuery = e.target.elements.query.value;
-    const searchQuery = e.target.elements.value;
-    onSubmit({searchQuery});
+    const searchQuery = e.target.elements.query.value;
+    onSubmit({ searchQuery });
     e.target.reset();
-}
+  };
 
+  return (
+    <SearchbarStyled>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchFormButton type="submit">
+          <FiSearch />
+          <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+        </SearchFormButton>
 
-return(
-    <Header>
-    <Form onSubmit={handleSubmit}>
-    <FormBtn type="submit">
-       <AiOutlineSearch size={30}/> 
-      <BtnLabel>Search</BtnLabel>
-    </FormBtn>
+        <SearchFormInput
+          type="text"
+          name="query"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+      </SearchForm>
+    </SearchbarStyled>
+  );
+};
 
-    <Input
-      type="text"
-      autocomplete="off"
-      autoFocus
-      placeholder="Search images and photos"
-    />
-    </Form>
-    </Header>
-    
-    )
-
-}
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

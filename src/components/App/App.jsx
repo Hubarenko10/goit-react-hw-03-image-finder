@@ -1,64 +1,101 @@
-import { fetch } from 'api';
-import { ImageGallery } from 'components/ImageGallery/ImageGallery';
-import { SearchBar } from 'components/SearchBar/SearchBar';
 import { Component } from 'react';
-import { AppStyle } from './AppStyled';
+import { fetchImages } from 'api';
+import toast, { Toaster } from 'react-hot-toast';
+import { AppStyled } from './App.styled';
+import { Searchbar } from 'components/Searchbar/Searchbar';
+import { ImageGallery } from 'components/ImageGallery/ImageGallery';
+import { Loader } from 'components/Loader/Loader';
+import { Button } from 'components/Button/Button';
+import { ModalImage } from 'components/Modal/Modal';
+import { GlobalStyle } from 'components/GlobalStyle';
 
 export class App extends Component {
   state = {
-    query: '',
-    photo: [],
     page: 1,
-    isLoading: false,
+    query: '',
+    photos: [],
+    selectedImage: false,
   };
 
   async componentDidUpdate(_, prevState) {
     try {
-      const { query, page, photo } = this.state;
+      const { page, query, photos } = this.state;
       if (prevState.page !== page || prevState.query !== query) {
         this.setState({ isLoading: true });
-        const responce = await fetch(query, page);
+        const responce = await fetchImages(query, page);
         const data = responce.hits.map(
-          ({ id, webformatURL, largeImageURL, tags }) => {
+          ({ id, largeImageURL, tags, webformatURL }) => {
             return {
               id,
-              webformatURL,
               largeImageURL,
               tags,
+              webformatURL,
             };
           }
         );
         this.setState({
-          photo: [...photo, ...data],
+          photos: [...photos, ...data],
           isLoading: false,
         });
       }
     } catch (error) {
-      console.log(error);
+      toast.error('Oops! Something went wrong! Please try again.');
     }
   }
 
+  loadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
+
   searchPhoto = ({ searchQuery }) => {
     const { query } = this.state;
-    if (query !== searchQuery) {
+    if (searchQuery !== query) {
       this.setState({
-        photo: [],
-        page: 1,
-      });
-      this.setState({
-        query: searchQuery,
+        photos: [],
         page: 1,
       });
     }
+    this.setState({
+      query: searchQuery,
+      page: 1,
+    });
+  };
+
+  selectImage = imgUrl => {
+    this.setState({
+      selectedImage: imgUrl,
+    });
+  };
+
+  resetImage = () => {
+    this.setState({
+      selectedImage: null,
+    });
   };
 
   render() {
-    const {photo} = this.state;
+    const { photos, isLoading, selectedImage } = this.state;
     return (
-      <AppStyle>
-        <SearchBar onSubmit={this.searchPhoto}/>
-        <ImageGallery photo={photo}/>
-      </AppStyle>
+      <>
+        <AppStyled>
+          <Searchbar onSubmit={this.searchPhoto} />
+          {photos.length > 0 && (
+            <ImageGallery photos={photos} onSelect={this.selectImage} />
+          )}
+          {photos.length > 11 && !isLoading && (
+            <Button onClick={this.loadMore} />
+          )}
+          {isLoading && <Loader />}
+          <ModalImage
+            selectImage={selectedImage}
+            resetImage={this.resetImage}
+          />
+          <Toaster />
+          <GlobalStyle />
+        </AppStyled>
+      </>
     );
   }
 }

@@ -1,21 +1,31 @@
-import { GalleryImg } from "components/ImageGalleryItem/ImageGalleryItemStyled";
-import { ImageGalleryStyled,GalleryItem } from "./ImageGalleryStyled";
+import PropTypes from 'prop-types';
+import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import {
+  ImageGalleryStyled,
+  ImageGalleryItemStyled,
+} from './ImageGallery.styled';
 
-
-export const ImageGallery= ({photo}) => {
-return(
+export const ImageGallery = ({ photos, onSelect }) => {
+  return (
     <ImageGalleryStyled>
-    {photo.map(({id,webformatURL,tags}) => {
-    return(
-        <GalleryItem key={id}>
-            <GalleryImg
-            smallImg={webformatURL}
-            tags={tags}
+      {photos.map(({ id, webformatURL, largeImageURL, tags }) => {
+        return (
+          <ImageGalleryItemStyled key={id}>
+            <ImageGalleryItem
+              photos={photos}
+              onSelect={onSelect}
+              smallImg={webformatURL}
+              largeImg={largeImageURL}
+              tags={tags}
             />
-        </GalleryItem>
-        )
-    
-    })}    
+          </ImageGalleryItemStyled>
+        );
+      })}
     </ImageGalleryStyled>
-    )
-}
+  );
+};
+
+ImageGallery.propTypes = {
+  photos: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
