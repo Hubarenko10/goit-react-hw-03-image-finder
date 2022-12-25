@@ -60,6 +60,7 @@ export class App extends Component {
     this.setState({
       query: searchQuery,
       page: 1,
+      photos: [],
     });
   };
 
